@@ -1,5 +1,18 @@
+/******************************************
+* Author : Baba Lemon 				      *
+* Title  : create_tables.sql			  *
+* Date   : 12/26/2021				   	  *
+* Postgresql Source Code to:              *
+* 	create students table Structure       *
+*.  populate table from students.csv file *
+* 	create stipends table Structure       *
+*.  populate table from stipends.csv file *
+* 	create Inventories table Structure.   *
+*****************************************/
+
 drop table if exists students;
-drop table if exists stipends;
+drop table if exists stipends;	
+drop table if exists inventories;
 
 /******* Create students structure *******/
 create table students (
@@ -54,9 +67,21 @@ COPY students(
     guardian_email,
     pod,
     school)
+    
 	FROM '/Users/babalemon/genius_stipend_tables/students.csv' 
 		CSV HEADER;
 
+
+create table inventories(
+	id INT,
+	model varchar,
+	hgp_nbr varchar,
+	serial_nbr varchar,
+	os varchar,
+	student_id int,
+	created_at timestamp not null,
+	updated_at timestamp not null
+);
 
 
 /********** Populate stipends tables data from CSV file *******/
@@ -68,8 +93,8 @@ COPY stipends(
   	comment,
   	student_id,
   	created_at,
-  	updated_at
-)
+  	updated_at)
+  	
 	FROM '/Users/babalemon/genius_stipend_tables/stipends.csv'
 		DELIMITER ','
 		CSV HEADER;
@@ -83,6 +108,7 @@ select
 	credit,
 	debit,
 	stipends.comment
+	
     from stipends 
     	join students 
     		on students.id = student_id 
@@ -94,6 +120,7 @@ select
 select 
 	name,
 	sum(credit-debit)
+	
 	from stipends 
 		join students 
 			on 
